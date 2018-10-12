@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class moveByTouch : MonoBehaviour {
 
-    public Joystick joystick;
+    public Joystick joystickWalk;
+    public Joystick joystickShoot;
+
+    public Rigidbody2D bulletPrefab;
+    public float shootCoolDown;
+
     public float runSpeed;
     public Animator animatorCharacter;
     public Animator animatorGun;
+
+    private float timeTillNextShoot;
 
     private float horizontalMove = 0f;
     private float verticalMove = 0f;
@@ -34,6 +41,8 @@ public class moveByTouch : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        timeTillNextShoot = shootCoolDown;
+
         charakter = "1";
         gun = "flamethrower";
         north = Animator.StringToHash(gun + "_north");
@@ -59,21 +68,23 @@ public class moveByTouch : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        timeTillNextShoot -= Time.deltaTime;
+
        // animatorCharacter.SetFloat("angel", 0);
        // animatorGun.SetFloat("angel", 0);
         if (Input.touchCount > 0)
         {
            
 
-            horizontalMove = joystick.Horizontal * runSpeed;
-            verticalMove = joystick.Vertical * runSpeed;
+            horizontalMove = joystickWalk.Horizontal * runSpeed;
+            verticalMove = joystickWalk.Vertical * runSpeed;
 
 
             
            
 
                 Vector2 fromVector2 = new Vector2(0, 50);
-                Vector2 toVector2 = new Vector2(joystick.Direction.x, joystick.Direction.y);
+                Vector2 toVector2 = new Vector2(joystickShoot.Direction.x, joystickShoot.Direction.y);
 
                 float ang = Vector2.Angle(fromVector2, toVector2);
                 Vector3 cross = Vector3.Cross(fromVector2, toVector2);
@@ -90,45 +101,52 @@ public class moveByTouch : MonoBehaviour {
 
 
             setAllFalse();
-            if (ang <= 25 || ang >= 335)
+            if (ang > 0)
             {
-                animatorGun.SetTrigger(north);
-                animatorCharacter.SetTrigger(north1);
-            }
-            else if (ang <= 65 && ang >= 25)
-            {
-                animatorGun.SetTrigger(northeast);
-                animatorCharacter.SetTrigger(northeast1);
-            }
-            else if (ang <= 115 && ang >= 65)
-            {
-                animatorGun.SetTrigger(east);
-                animatorCharacter.SetTrigger(east1);
-            }
-            else if (ang <= 155 && ang >= 115)
-            {
-                animatorGun.SetTrigger(eastsouth);
-                animatorCharacter.SetTrigger(eastsouth1);
-            }
-            else if (ang <= 205 && ang >= 155)
-            {
-                animatorGun.SetTrigger(south);
-                animatorCharacter.SetTrigger(south1);
-            }
-            else if (ang <= 245 && ang >= 205)
-            {
-                animatorGun.SetTrigger(southwest);
-                animatorCharacter.SetTrigger(southwest1);
-            }
-            else if (ang <= 295 && ang >= 245)
-            {
-                animatorGun.SetTrigger(west);
-                animatorCharacter.SetTrigger(west1);
-            }
-            else if (ang <= 335 && ang >= 295)
-            {
-                animatorGun.SetTrigger(westnorth);
-                animatorCharacter.SetTrigger(westnorth1);
+                if (ang <= 25 || ang >= 335)
+                {
+                    animatorGun.SetTrigger(north);
+                    animatorCharacter.SetTrigger(north1);
+                }
+                else if (ang <= 65 && ang >= 25)
+                {
+                    animatorGun.SetTrigger(northeast);
+                    animatorCharacter.SetTrigger(northeast1);
+                }
+                else if (ang <= 115 && ang >= 65)
+                {
+                    animatorGun.SetTrigger(east);
+                    animatorCharacter.SetTrigger(east1);
+                }
+                else if (ang <= 155 && ang >= 115)
+                {
+                    animatorGun.SetTrigger(eastsouth);
+                    animatorCharacter.SetTrigger(eastsouth1);
+                }
+                else if (ang <= 205 && ang >= 155)
+                {
+                    animatorGun.SetTrigger(south);
+                    animatorCharacter.SetTrigger(south1);
+                }
+                else if (ang <= 245 && ang >= 205)
+                {
+                    animatorGun.SetTrigger(southwest);
+                    animatorCharacter.SetTrigger(southwest1);
+                }
+                else if (ang <= 295 && ang >= 245)
+                {
+                    animatorGun.SetTrigger(west);
+                    animatorCharacter.SetTrigger(west1);
+                }
+                else if (ang <= 335 && ang >= 295)
+                {
+                    animatorGun.SetTrigger(westnorth);
+                    animatorCharacter.SetTrigger(westnorth1);
+                }
+                if (timeTillNextShoot <= 0)
+                {
+                    Fire(joystickShoot.Direction.x, joystickShoot.Direction.y, ang);
+                }
             }
 
             //for (int i = 0; i < Input.touchCount; i++){
@@ -164,5 +182,23 @@ public class moveByTouch : MonoBehaviour {
         animatorCharacter.SetBool(southwest1, false);
         animatorCharacter.SetBool(west1, false);
         animatorCharacter.SetBool(westnorth1, false);
+    }
+
+    void Fire(float x,float y,float angle)
+    {
+
+        timeTillNextShoot = shootCoolDown;
+        // Create the Bullet from the Bullet Prefab
+        Rigidbody2D bulletClone = (Rigidbody2D)Instantiate(
+            bulletPrefab,
+            transform.position+new Vector3(x,y,0)*2,
+            Quaternion.Euler(0, 0, (angle-90)*-1));
+
+        // Add velocity to the bullet
+        //bulletClone.GetComponent<Rigidbody2D>().velocity = bulletClone.transform.forward * 6;
+        bulletClone.GetComponent<Rigidbody2D>().velocity = new Vector2(x,y)*5;
+
+        // Destroy the bullet after 2 seconds
+        //Destroy(bulletClone, 2.0f);
     }
 }
