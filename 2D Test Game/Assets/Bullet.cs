@@ -5,10 +5,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
 
 
-    public Animator animator;
 
     public float speed;
     public float lifetime;
+    public float damage;
 
     private float lifetimeleft;
     private bool isAlive = false;
@@ -37,4 +37,14 @@ public class Bullet : MonoBehaviour {
         }
 
 	}
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("trigger enter dmg"+damage);
+        if (other.tag == "Monster")
+        {
+            other.GetComponent<slime>().takeDamage(damage);
+            Destroy(this);
+        }
+    }
 }

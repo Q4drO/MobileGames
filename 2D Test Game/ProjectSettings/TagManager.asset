@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -46,4 +47,7 @@ TagManager:
     locked: 0
   - name: Gun
     uniqueID: 2804480447
+    locked: 0
+  - name: UI
+    uniqueID: 2146529307
     locked: 0

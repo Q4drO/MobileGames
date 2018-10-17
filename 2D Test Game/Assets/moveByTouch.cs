@@ -89,11 +89,12 @@ public class moveByTouch : MonoBehaviour {
                 float ang = Vector2.Angle(fromVector2, toVector2);
                 Vector3 cross = Vector3.Cross(fromVector2, toVector2);
 
-                if (cross.z > 0)
-                    ang = 360 - ang;
+            if (cross.z > 0)
+            {
+                ang = 360 - ang;
+            }
 
-
-            Debug.Log(ang);
+                
 
 
 
@@ -196,7 +197,7 @@ public class moveByTouch : MonoBehaviour {
 
         // Add velocity to the bullet
         //bulletClone.GetComponent<Rigidbody2D>().velocity = bulletClone.transform.forward * 6;
-        bulletClone.GetComponent<Rigidbody2D>().velocity = new Vector2(x,y)*5;
+        bulletClone.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(x-0.1f, x+0.1f), Random.Range(y-0.1f, y+0.1f)) *3;
 
         // Destroy the bullet after 2 seconds
         //Destroy(bulletClone, 2.0f);
