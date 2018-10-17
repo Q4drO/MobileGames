@@ -192,7 +192,7 @@ public class moveByTouch : MonoBehaviour {
         // Create the Bullet from the Bullet Prefab
         Rigidbody2D bulletClone = (Rigidbody2D)Instantiate(
             bulletPrefab,
-            transform.position+new Vector3(x,y,0)*2,
+            transform.position,
             Quaternion.Euler(0, 0, (angle-90)*-1));
 
         // Add velocity to the bullet
