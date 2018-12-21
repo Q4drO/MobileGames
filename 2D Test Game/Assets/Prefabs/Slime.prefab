@@ -221,11 +221,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc6ee747f8a38d44b92c0a423bd97a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {fileID: 4879004383840804, guid: 83cffd15a91c7ed4d9c00fa2dc10d131, type: 2}
   speed: 3
   minDistance: 0.8
-  health: 100
+  health: 10
   healthBar: {fileID: 114177402532347576}
+  gameObjectSlime: {fileID: 1420426264155488}
 --- !u!114 &114877396617888248
 MonoBehaviour:
   m_ObjectHideFlags: 1

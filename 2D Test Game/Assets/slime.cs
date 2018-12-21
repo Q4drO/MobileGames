@@ -7,11 +7,14 @@ using UnityEngine.UI;
 public class slime : MonoBehaviour {
 
 
-    public Transform target;
+
     public float speed;
     public float minDistance;
     public float health;
     public Image healthBar;
+
+    public Transform target;
+    private GameObject gameObjectSlime;
 
     private float startHealth;
     private Animator animator;
@@ -35,11 +38,14 @@ public class slime : MonoBehaviour {
         east = Animator.StringToHash(monster + "_east");
         south = Animator.StringToHash(monster + "_south");
         west = Animator.StringToHash(monster + "_west");
-        
+
+        gameObjectSlime = this.gameObject;
 
     }
 
-    void Update () {
+
+
+        void Update () {
 
         if (Vector2.Distance(transform.position, target.position) > minDistance)
         {
@@ -93,8 +99,8 @@ public class slime : MonoBehaviour {
 
     private void dead()
     {
-        //GameObject slimeClone1 = Instantiate(gameObjectSlime, transform.position, transform.rotation);
-        //GameObject slimeClone2 = Instantiate(gameObjectSlime, transform.position, transform.rotation);
+        GameObject slimeClone1 = Instantiate(gameObjectSlime, transform.position, transform.rotation);
+        GameObject slimeClone2 = Instantiate(gameObjectSlime, transform.position, transform.rotation);
         Destroy(this);
     }
 
