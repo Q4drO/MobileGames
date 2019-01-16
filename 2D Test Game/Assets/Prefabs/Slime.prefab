@@ -221,12 +221,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc6ee747f8a38d44b92c0a423bd97a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 4879004383840804, guid: 83cffd15a91c7ed4d9c00fa2dc10d131, type: 2}
+  dropableItems:
+  - name: Coin
+    chance: 0.1
+    gameObject: {fileID: 1530442492650526, guid: 303fd6074c74f454e89a602e22f84f2f,
+      type: 2}
+  - name: Heart
+    chance: 0.05
+    gameObject: {fileID: 1293479487075378, guid: 57dde86277e9c5646a612ababf2d9a9c,
+      type: 2}
   speed: 3
   minDistance: 0.8
   health: 10
   healthBar: {fileID: 114177402532347576}
-  gameObjectSlime: {fileID: 1420426264155488}
+  damage: 1
+  attackCooldown: 0.5
 --- !u!114 &114877396617888248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -360,7 +369,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1420426264155488}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.2314721}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 224366409377596216}
@@ -369,7 +378,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.59, y: -0.25}
+  m_AnchoredPosition: {x: -3, y: 0}
   m_SizeDelta: {x: 0.16, y: 0.16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224366409377596216

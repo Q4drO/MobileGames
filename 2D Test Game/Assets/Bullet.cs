@@ -40,11 +40,10 @@ public class Bullet : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("trigger enter dmg"+damage);
         if (other.tag == "Monster")
         {
             other.GetComponent<slime>().takeDamage(damage);
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }

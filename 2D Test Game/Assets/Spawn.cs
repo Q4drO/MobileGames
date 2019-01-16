@@ -2,41 +2,31 @@
 using UnityEngine.Events;
 using System.Collections;
 
-public class Spawner : MonoBehaviour
+public class Spawn : MonoBehaviour
 {
 
     public int spawnCount;
-    [Range(1, 100)]
     public int spawnSize = 1;
-    //public float monsterOffset = 1;
     public GameObject monster;
 
-    //  private UnityAction spawnListener;
-    //
-    //  void Awake () {
-    //      spawnListener = new UnityAction (Spawn);
-    //  }
 
     void OnEnable()
     {
-        //      EventManager.StartListening ("Spawn", spawnListener);
-        EventManager.StartListening("Spawn", Spawn);
+        EventManager.StartListening("Spawn", spawn);
     }
 
     void OnDisable()
     {
-        //      EventManager.StopListening ("Spawn", spawnListener);
-        EventManager.StopListening("Spawn", Spawn);
+        EventManager.StopListening("Spawn", spawn);
     }
 
-    void Spawn()
+    void spawn()
     {
         for (int i = 0; i < spawnCount; i++)
         {
             Vector2 spawnPosition = GetSpawnPosition();
 
             Quaternion spawnRotation = new Quaternion();
-            //spawnRotation.eulerAngles = new Vector3(0.0f, Random.Range(0.0f, 360.0f));
             spawnRotation.eulerAngles = new Vector2(0.0f, 0.0f);
             if (spawnPosition != Vector2.zero)
             {
@@ -57,7 +47,6 @@ public class Spawner : MonoBehaviour
             test = !Physics.CheckSphere(spawnPosition, 0.75f);
             if (Time.realtimeSinceStartup - startTime > 0.5f)
             {
-                Debug.Log("Time out placing Minion!");
                 return Vector2.zero;
             }
         }

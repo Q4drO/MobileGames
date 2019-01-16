@@ -39,6 +39,8 @@ public class moveByTouch : MonoBehaviour {
     private int west1;
     private int westnorth1;
 
+    private Vector3 shootingDirection = new Vector3(0, 0, 0);
+
     // Use this for initialization
     void Start () {
         timeTillNextShoot = shootCoolDown;
@@ -75,13 +77,8 @@ public class moveByTouch : MonoBehaviour {
         if (Input.touchCount > 0)
         {
            
-
             horizontalMove = joystickWalk.Horizontal * runSpeed;
             verticalMove = joystickWalk.Vertical * runSpeed;
-
-
-            
-           
 
                 Vector2 fromVector2 = new Vector2(0, 50);
                 Vector2 toVector2 = new Vector2(joystickShoot.Direction.x, joystickShoot.Direction.y);
@@ -94,12 +91,6 @@ public class moveByTouch : MonoBehaviour {
                 ang = 360 - ang;
             }
 
-                
-
-
-
-
-
 
             setAllFalse();
             if (ang > 0)
@@ -108,41 +99,49 @@ public class moveByTouch : MonoBehaviour {
                 {
                     animatorGun.SetTrigger(north);
                     animatorCharacter.SetTrigger(north1);
+                    shootingDirection = new Vector3(0, 1, 0);
                 }
                 else if (ang <= 65 && ang >= 25)
                 {
                     animatorGun.SetTrigger(northeast);
                     animatorCharacter.SetTrigger(northeast1);
+                    shootingDirection = new Vector3(1, 0.5f, 0);
                 }
                 else if (ang <= 115 && ang >= 65)
                 {
                     animatorGun.SetTrigger(east);
                     animatorCharacter.SetTrigger(east1);
+                    shootingDirection = new Vector3(1, 0, 0);
                 }
                 else if (ang <= 155 && ang >= 115)
                 {
                     animatorGun.SetTrigger(eastsouth);
                     animatorCharacter.SetTrigger(eastsouth1);
+                    shootingDirection = new Vector3(1, -1, 0);
                 }
                 else if (ang <= 205 && ang >= 155)
                 {
                     animatorGun.SetTrigger(south);
                     animatorCharacter.SetTrigger(south1);
+                    shootingDirection = new Vector3(0, -1, 0);
                 }
                 else if (ang <= 245 && ang >= 205)
                 {
                     animatorGun.SetTrigger(southwest);
                     animatorCharacter.SetTrigger(southwest1);
+                    shootingDirection = new Vector3(-1, -1, 0);
                 }
                 else if (ang <= 295 && ang >= 245)
                 {
                     animatorGun.SetTrigger(west);
                     animatorCharacter.SetTrigger(west1);
+                    shootingDirection = new Vector3(-1, 0, 0);
                 }
                 else if (ang <= 335 && ang >= 295)
                 {
                     animatorGun.SetTrigger(westnorth);
                     animatorCharacter.SetTrigger(westnorth1);
+                    shootingDirection = new Vector3(-1, 0.5f, 0);
                 }
                 if (timeTillNextShoot <= 0)
                 {
@@ -187,12 +186,12 @@ public class moveByTouch : MonoBehaviour {
 
     void Fire(float x,float y,float angle)
     {
-
+        EventManager.TriggerEvent("FlamethrowerShoot");
         timeTillNextShoot = shootCoolDown;
         // Create the Bullet from the Bullet Prefab
         Rigidbody2D bulletClone = (Rigidbody2D)Instantiate(
             bulletPrefab,
-            transform.position,
+            transform.position + shootingDirection,
             Quaternion.Euler(0, 0, (angle-90)*-1));
 
         // Add velocity to the bullet

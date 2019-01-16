@@ -6,16 +6,18 @@ using UnityEngine.UI;
 
 public class slime : MonoBehaviour {
 
-
+    public DropableItem[] dropableItems;
 
     public float speed;
     public float minDistance;
     public float health;
     public Image healthBar;
+    public float damage = 1.0f;
+    public float attackCooldown = 0.5f;
 
-    public Transform target;
+    private float startAttackCooldown;
     private GameObject gameObjectSlime;
-
+    private GameObject targetGameObject;
     private float startHealth;
     private Animator animator;
     private int north;
@@ -27,9 +29,12 @@ public class slime : MonoBehaviour {
     private int west;
     private int westnorth;
     private string monster;
+    private bool isDead = false;
 
     void Start()
     {
+        startAttackCooldown = attackCooldown;
+        targetGameObject = GameObject.FindWithTag("Player");
         startHealth = health;
 
         animator = GetComponent<Animator>();
@@ -47,15 +52,23 @@ public class slime : MonoBehaviour {
 
         void Update () {
 
-        if (Vector2.Distance(transform.position, target.position) > minDistance)
+        if(attackCooldown > 0)
         {
-            transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            attackCooldown -= Time.deltaTime;
+        }
+
+        if (Vector2.Distance(transform.position, targetGameObject.transform.position) > minDistance)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, targetGameObject.transform.position, speed * Time.deltaTime);
+        }
+        else
+        {
+            attack();
         }
 
 
-
-        Vector3 dir = target.transform.position - transform.position;
-        dir = target.transform.InverseTransformDirection(dir);
+        Vector3 dir = targetGameObject.transform.position - transform.position;
+        dir = targetGameObject.transform.InverseTransformDirection(dir);
         float ang = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         if (ang < 0)
@@ -97,11 +110,23 @@ public class slime : MonoBehaviour {
         }
     }
 
+    void attack()
+    {
+        if(attackCooldown <= 0)
+        {
+            targetGameObject.GetComponent<CharakterHealth>().takeDamage(damage);
+            attackCooldown = startAttackCooldown;
+        }
+    }
+
     private void dead()
     {
-        GameObject slimeClone1 = Instantiate(gameObjectSlime, transform.position, transform.rotation);
-        GameObject slimeClone2 = Instantiate(gameObjectSlime, transform.position, transform.rotation);
-        Destroy(this);
+        if (!isDead) {
+            Drop();
+            isDead = true;
+            EventManager.TriggerEvent("Spawn");
+            Destroy(gameObject);
+        }
     }
 
     private void setAllFalse()
@@ -111,5 +136,19 @@ public class slime : MonoBehaviour {
         animator.SetBool(south, false);
         animator.SetBool(west, false);
         
+    }
+
+    private void Drop()
+    {
+        foreach (DropableItem drop in dropableItems)
+        {
+            float tmp = Random.Range(0.01f, 1f);
+            if (tmp < drop.chance) 
+            {
+                Debug.Log("droped");
+                GameObject  item = Instantiate(drop.gameObject);
+                item.transform.position = this.transform.position;
+            }
+        }
     }
 }

@@ -73,4 +73,5 @@ public class EventManager : MonoBehaviour
             thisEvent.Invoke();
         }
     }
+
 }
